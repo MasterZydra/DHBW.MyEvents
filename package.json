@@ -8,6 +8,7 @@
     "frontend-prod": "vue build frontend/main.js --dest frontend/dist"
   },
   "dependencies": {
+    "@mdi/font": "^4.9.95",
     "@vue/cli": "^4.2.3",
     "@vue/cli-service-global": "^4.2.3",
     "cookie-parser": "~1.4.4",
@@ -16,9 +17,14 @@
     "morgan": "~1.9.1",
     "node-sass-middleware": "0.11.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.1.6"
+    "vue-router": "^3.1.6",
+    "vuetify": "^2.2.15"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "deepmerge": "^4.2.2",
+    "fibers": "^4.0.2",
+    "nodemon": "^2.0.2",
+    "sass": "^1.26.1",
+    "sass-loader": "^8.0.2"
   }
 }
