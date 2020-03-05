@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start-server": "nodemon backend/bin/www",
+    "start-server-dev": "nodemon --inspect backend/bin/www",
     "serve-frontend": "vue-cli-service serve",
     "build-frontend": "vue-cli-service build --dest frontend/dist"
   },

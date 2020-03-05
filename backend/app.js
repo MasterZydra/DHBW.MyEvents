@@ -6,6 +6,8 @@ var sassMiddleware = require('node-sass-middleware');
 
 var indexRouter = require('./routes');
 var usersRouter = require('./routes/users');
+var authenticateRouter = require('./routes/authenticate');
+var callbackRouter = require('./routes/callback');
 
 var app = express();
 
@@ -23,5 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/authenticate', authenticateRouter);
+app.use('/callback', callbackRouter);
 
 module.exports = app;
