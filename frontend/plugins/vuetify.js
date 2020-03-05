@@ -2,6 +2,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css'
+// import 'typeface-roboto/index.css';
 // import colors from "vuetify/lib/util/colors";
 
 Vue.use(Vuetify);
