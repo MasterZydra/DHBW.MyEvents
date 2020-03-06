@@ -34,7 +34,7 @@ let generate = async function() {
     }
     let notFoundString = "";
 
-    const fileStream = fs.createReadStream('./backend/genres-raw.txt');
+    const fileStream = fs.createReadStream('./genres/genres-raw.txt');
     const rl = readline.createInterface({
         input: fileStream,
         crlfDelay: Infinity
@@ -66,13 +66,13 @@ let generate = async function() {
 
     // write to files
     let yamltext = YAML.stringify(genres);
-    fs.writeFile("./backend/genres.yml", yamltext, function(err) {
+    fs.writeFile("./genres/genres.yml", yamltext, function(err) {
         if (err) {
             return console.log(err);
         }
         console.log("The file was saved!");
     });
-    fs.writeFile("./backend/notFoundGenres.txt", notFoundString, function(err) {
+    fs.writeFile("./genres/notFoundGenres.txt", notFoundString, function(err) {
         if (err) {
             return console.log(err);
         }
@@ -81,7 +81,7 @@ let generate = async function() {
 };
 
 function getMain(genre) {
-    const o = yaml.safeLoad(fs.readFileSync('./backend/genres.yml', 'utf8'));
+    const o = yaml.safeLoad(fs.readFileSync('./genres/genres.yml', 'utf8'));
     return searchRecursive(o, genre);
 }
 
