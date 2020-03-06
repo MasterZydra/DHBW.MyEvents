@@ -1,6 +1,5 @@
 var express = require('express');
 var request = require('request');
-var querystring = require('querystring');
 var router = express.Router();
 var client_id = '905baa9c4a8c41b8868f961e19b1cc71';
 var client_secret = '0085f87a56cb4e40a6a15e556c01ade9';
@@ -55,7 +54,7 @@ router.get('/loggedIn', function(req, res, next){
 
     var artists_options = {
         url: 'https://api.spotify.com/v1/me/top/artists',
-        qs: {limit: 2,
+        qs: {limit: 20,
             offset: 0,
             time_range: 'short_term'},
         headers: { 'Authorization': 'Bearer ' + access_token },
@@ -81,6 +80,8 @@ router.get('/loggedIn', function(req, res, next){
                 });
             });
 
+            console.log(genres);
+
             var search = [];
             genres.forEach(function (item) {
                 searchGenres.forEach(function (element) {
@@ -92,10 +93,9 @@ router.get('/loggedIn', function(req, res, next){
             });
 
             console.log(search);
+            res.send(search);
         }
     });
-
-    res.redirect('http://localhost:3000');
 });
 
 module.exports = router;
