@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authenticateRouter = require('./routes/authenticate');
 var callbackRouter = require('./routes/callback');
+var eventsRoute = require('./routes/events');
 
 var app = express();
 
@@ -27,5 +28,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/authenticate', authenticateRouter);
 app.use('/callback', callbackRouter);
+app.use('/events', eventsRoute);
 
 module.exports = app;
