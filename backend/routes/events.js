@@ -6,12 +6,35 @@ const eventful = require('eventful-node');
 const client = new eventful.Client(eventfulKey);
 
 router.get('/', function (req, res, next) {
-    var options = {
-        keywords: req.query.keywords,
-        date: 'Next Week',
-        location: req.query.location,
-        page_size: 25
-    };
+    var keywords = req.query.keywords;
+    keywords = keywords.split('||');
+    var options;
+    if(keywords.length===1)
+    {
+        options = {
+            keywords: keywords[0],
+            date: 'Next Week',
+            location: req.query.location,
+            page_size: 25
+        };
+    }
+    else
+    {
+        var q = '';
+        keywords.forEach(item => {
+            q = q.concat('tag:' + item + ' || ');
+        });
+        q = q.substring(0, q.length-3);
+
+        options = {
+            keywords: q,
+            date: 'Next Week',
+            location: req.query.location,
+            page_size: 25
+        };
+    }
+
+    console.log(options);
 
     client.searchEvents(options, function (err, data) {
         if(err)
@@ -33,6 +56,7 @@ router.get('/', function (req, res, next) {
                     venue_name: resultEvents[i].venue_name,
                     venue_address: resultEvents[i].venue_address,
                     description: resultEvents[i].description,
+                    performers: resultEvents[i].performers,
                     city_name: resultEvents[i].city_name
                 };
                 events.push(event);

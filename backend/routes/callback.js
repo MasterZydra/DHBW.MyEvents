@@ -93,7 +93,20 @@ router.get('/loggedIn', function(req, res, next){
             });
 
             console.log(search);
-            res.send(search);
+            var keywords = '';
+            search.forEach(function (item) {
+                keywords = keywords.concat(item, '||');
+            });
+            if(keywords.length === 0)
+            {
+                res.send('Error. No genres found');
+            }
+            else
+            {
+                keywords = keywords.substring(0, keywords.length-2);
+                var location = 'Germany';
+                res.redirect('http://localhost:3000/events?keywords=' + keywords + '&location=' + location);
+            }
         }
     });
 });
