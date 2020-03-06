@@ -1,7 +1,6 @@
 <template>
     <div>
-        <v-btn>Anmelden</v-btn>
-        test
+        <v-btn small>Anmelden</v-btn>
     </div>
 </template>
 

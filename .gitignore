@@ -231,3 +231,18 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+node_modules
+/dist
+
+# local env files
+.env.local
+.env.*.local
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
