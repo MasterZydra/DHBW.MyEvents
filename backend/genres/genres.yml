@@ -66,7 +66,6 @@ classical:
   - symphonic rock
   - jam band
   - modern classical
-  - neo classical metal
   - big band
   - classical period
   - symphonic metal
@@ -529,6 +528,14 @@ metal:
   - cryptic black metal
   - ethereal gothic
   - gothic doom
+  - neo classical metal
+  - melodic metal
+  - symphonic power metal
+  - scottish metal
+mittelalter:
+  - hurdy-gurdy
+  - medieval folk
+  - medieval rock
 pop:
   - dance pop
   - pop rap
@@ -813,7 +820,6 @@ rock:
   - belgian rock
   - peruvian rock
   - british alternative rock
-  - medieval rock
   - puerto rican rock
   - portuguese rock
   - russian rock
@@ -876,6 +882,10 @@ rock:
   - jangle rock
   - drone psych
   - rock noise
+  - german rock
+  - neue deutsche harte
+  - australian rock
+  - german alternative rock
 soul:
   - neo soul
   - vapor soul
