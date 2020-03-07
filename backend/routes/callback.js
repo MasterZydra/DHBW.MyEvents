@@ -1,11 +1,11 @@
 var express = require('express');
 var request = require('request');
 var router = express.Router();
+const genre = require('../genres/genre.js');
 var client_id = '905baa9c4a8c41b8868f961e19b1cc71';
 var client_secret = '0085f87a56cb4e40a6a15e556c01ade9';
 var access_token;
 var refresh_token;
-var searchGenres = ['pop', 'schlager', 'rock', 'metal', 'rap', 'hip hop', 'country', 'jazz', 'classic'];
 
 router.get('/', function (req, res, next) {
     var code = req.query.code;
@@ -81,15 +81,17 @@ router.get('/loggedIn', function(req, res, next){
             });
 
             console.log(genres);
-
             var search = [];
-            genres.forEach(function (item) {
-                searchGenres.forEach(function (element) {
-                    if(item.includes(element) && !search.includes(element))
-                    {
-                        search.push(element);
-                    }
-                });
+            genres.forEach(item => {
+                var main = genre.getMain(item);
+                if(main == null)
+                {
+                    console.log("main is undefined for " + item);
+                }
+                else if(!search.includes(main))
+                {
+                    search.push(main);
+                }
             });
 
             console.log(search);

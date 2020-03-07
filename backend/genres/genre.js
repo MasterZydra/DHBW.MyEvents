@@ -81,7 +81,7 @@ let generate = async function() {
 };
 
 function getMain(genre) {
-    const o = yaml.safeLoad(fs.readFileSync('./genres/genres.yml', 'utf8'));
+    const o = yaml.safeLoad(fs.readFileSync(__dirname + '/genres.yml', 'utf8'));
     return searchRecursive(o, genre);
 }
 
