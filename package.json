@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start-server-prod": "node backend/bin/www",
     "start-server": "nodemon backend/bin/www",
     "start-server-dev": "nodemon --inspect backend/bin/www",
     "serve-frontend": "vue-cli-service serve",
