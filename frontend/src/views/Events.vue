@@ -12,17 +12,66 @@
 		</div>
 		<div class="grid">
 			<template v-for="(event, index) in events">
-				<v-card class="event" tile>
-					<div class="ma-3">
-						<div class="headline font-weight-black">
-							{{event.title}}
+				<v-hover v-slot:default="{ hover }">
+					<v-card class="event" tile :elevation="hover ? 16 : 2" @click="event.dialog = true">
+						<div class="ma-3">
+							<div class="headline font-weight-black">
+								{{event.title}}
+							</div>
+							<div class="text-truncate">
+								<v-icon>mdi-music-note-eighth</v-icon>
+								<span>
+									{{event.performers.join(', ')}}
+								</span>
+							</div>
+							<div class="text-truncate">
+								<v-icon>mdi-calendar</v-icon>
+								<span>
+									{{event.start_time}}
+								</span>
+							</div>
+							<div class="text-truncate">
+								<v-icon>mdi-map-marker</v-icon>
+								<span>
+									{{event.city_name}}, {{event.venue_name}}
+								</span>
+							</div>
 						</div>
-						<div class="bottom-left">
-							<v-icon>mdi-map-marker</v-icon>
-							{{event.city_name}}, {{event.venue_name}}
-						</div>
-					</div>
-				</v-card>
+					</v-card>
+				</v-hover>
+				<v-dialog v-model="event.dialog" max-width="600px">
+					<v-card>
+						<v-card-title class="headline">{{event.title}}</v-card-title>
+						<v-card-text>
+							{{event.description}}
+							<p></p>
+							<div class="text-truncate">
+								<v-icon>mdi-music-note-eighth</v-icon>
+								<span>
+									{{event.performers.join(', ')}}
+								</span>
+							</div>
+							<div class="text-truncate">
+								<v-icon>mdi-calendar</v-icon>
+								<span>
+									{{event.start_time}}
+								</span>
+							</div>
+							<div class="text-truncate">
+								<v-icon>mdi-map-marker</v-icon>
+								<span>
+									{{event.city_name}}, {{event.venue_name}} ({{event.venue_address}})
+								</span>
+							</div>
+						</v-card-text>
+						<v-card-actions>
+							<v-spacer></v-spacer>
+							<v-btn text @click="event.dialog = false">
+								Close
+							</v-btn>
+						</v-card-actions>
+					</v-card>
+				</v-dialog>
 			</template>
 		</div>
 	</div>
@@ -36,30 +85,34 @@
 				{
 					title: "AC/DC-Konzert", start_time:"20.10.2020 20:00", venue_name: "Schleierhalle",
 					venue_address:"Kaiserstraße 115",
-					description:"AC/DC kommt nach 10 Jahren wieder nach Deutschland. Die Vorband Volbeat heizt dabei so richt ein. Schnell Tickets sichern! ",
+					description:"AC/DC kommt nach 1 Jahr wieder nach Deutschland. Die Vorband Volbeat heizt dabei so richt ein. Schnell Tickets sichern! ",
 					performers: ["AC/DC", "Volbeat"],
-					city_name: "Stuttgart"
+					city_name: "Stuttgart",
+					dialog: false
+				},
+				{
+					title: "AC/DC-Konzerte oder so", start_time:"20.10.2020 20:00", venue_name: "Schleierhalle",
+					venue_address:"Kaiserstraße 115",
+					description:"AC/DC kommt nach 15 Jahren wieder nach Deutschland. Die Vorband Volbeat heizt dabei so richt ein. Schnell Tickets sichern! ",
+					performers: ["AC/DC", "Volbeat"],
+					city_name: "Stuttgart",
+					dialog: false
+				},
+				{
+					title: "AC/DC-Konzert", start_time:"20.10.2020 20:00", venue_name: "Schleierhallelele",
+					venue_address:"Kaiserstraße 115",
+					description:"AC/DC kommt nach 20 Jahren wieder nach Deutschland. Die Vorband Volbeat heizt dabei so richt ein. Schnell Tickets sichern! ",
+					performers: ["AC/DC", "Volbeat"],
+					city_name: "Stuttgart",
+					dialog: false
 				},
 				{
 					title: "AC/DC-Konzert", start_time:"20.10.2020 20:00", venue_name: "Schleierhalle",
 					venue_address:"Kaiserstraße 115",
-					description:"AC/DC kommt nach 10 Jahren wieder nach Deutschland. Die Vorband Volbeat heizt dabei so richt ein. Schnell Tickets sichern! ",
+					description:"AC/DC kommt nach 55 Jahren wieder nach Deutschland. Die Vorband Volbeat heizt dabei so richt ein. Schnell Tickets sichern! ",
 					performers: ["AC/DC", "Volbeat"],
-					city_name: "Stuttgart"
-				},
-				{
-					title: "AC/DC-Konzert", start_time:"20.10.2020 20:00", venue_name: "Schleierhalle",
-					venue_address:"Kaiserstraße 115",
-					description:"AC/DC kommt nach 10 Jahren wieder nach Deutschland. Die Vorband Volbeat heizt dabei so richt ein. Schnell Tickets sichern! ",
-					performers: ["AC/DC", "Volbeat"],
-					city_name: "Stuttgart"
-				},
-				{
-					title: "AC/DC-Konzert", start_time:"20.10.2020 20:00", venue_name: "Schleierhalle",
-					venue_address:"Kaiserstraße 115",
-					description:"AC/DC kommt nach 10 Jahren wieder nach Deutschland. Die Vorband Volbeat heizt dabei so richt ein. Schnell Tickets sichern! ",
-					performers: ["AC/DC", "Volbeat"],
-					city_name: "Stuttgart"
+					city_name: "Stuttgart",
+					dialog: false
 				}
 			],
 			genres: [
@@ -78,6 +131,9 @@
 		height: 0;
 		padding-bottom: 100%;
 		position: relative;
+	}
+	.event:hover {
+		cursor: pointer;
 	}
 	.grid {
 		display: grid;
