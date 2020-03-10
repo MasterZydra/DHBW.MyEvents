@@ -6,6 +6,11 @@ const eventful = require('eventful-node');
 const client = new eventful.Client(eventfulKey);
 
 router.get('/', function (req, res, next) {
+    let location = req.query.location;
+    if(location == null)
+    {
+        location = 'Germany';
+    }
     var keywords = req.query.keywords;
     keywords = keywords.split(seperator);
     var options;
@@ -14,7 +19,7 @@ router.get('/', function (req, res, next) {
         options = {
             keywords: keywords[0],
             date: 'Next Week',
-            location: req.query.location,
+            location: location,
             page_size: 25
         };
     }
@@ -29,7 +34,7 @@ router.get('/', function (req, res, next) {
         options = {
             keywords: q,
             date: 'Next Week',
-            location: req.query.location,
+            location: location,
             page_size: 25
         };
     }
