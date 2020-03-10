@@ -83,14 +83,16 @@ router.get('/loggedIn', function(req, res, next){
             console.log(genres);
             var search = [];
             genres.forEach(item => {
-                var main = genre.getMain(item);
-                if(main == null)
-                {
-                    console.log("main is undefined for " + item);
+                let newItem = null;
+                if (genre.isInEventful(item)) {
+                    newItem = item;
+                } else {
+                    newItem = genre.getMain(item);
                 }
-                else if(!search.includes(main))
-                {
-                    search.push(main);
+                if (!newItem) {
+                    console.log("not adding " + item + " as a genre param");
+                } else if(!search.includes(newItem)){
+                    search.push(newItem);
                 }
             });
 
