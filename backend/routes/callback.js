@@ -1,58 +1,65 @@
 var express = require('express');
-var request = require('request');
+var axios = require('axios');
 var router = express.Router();
 const genre = require('../genres/genre.js');
-var client_id = '905baa9c4a8c41b8868f961e19b1cc71';
-var client_secret = '0085f87a56cb4e40a6a15e556c01ade9';
-var access_token;
-var refresh_token;
+const config = require("../config");
+// var client_id = '905baa9c4a8c41b8868f961e19b1cc71';
+// var client_secret = '0085f87a56cb4e40a6a15e556c01ade9';
+// var frontendUrl;
 
 router.get('/', function (req, res, next) {
-    var code = req.query.code;
+    let code = req.query.code;
 
-    var authOptions = {
+    let frontendUrl = req.headers.referer ? req.headers.referer : config.apiUrl;
+
+    getSpotifyAccessToken(code).then(function (access_token) {
+        console.log(frontendUrl);
+        return getTopArtists(access_token);
+    }).then(function (artists) {
+        let genres = getGenresFromArtists(artists);
+        console.log(genres);
+        res.send(genres);
+    }).catch(function (error) {
+        res.send(error);
+    });
+});
+
+async function getSpotifyAccessToken(code) {
+    let data = 'code=' + code + '&redirect_uri=' + config.spotify.redirect_uri + '&grant_type=authorization_code';
+    let authOptions = {
+        method: 'post',
         url: 'https://accounts.spotify.com/api/token',
-        form: {
-            code: code,
-            redirect_uri: 'http://localhost:3000/callback',
-            grant_type: 'authorization_code'
-        },
+        data: data,
         headers: {
-            'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + (new Buffer(config.spotify.client_id + ':' + config.spotify.client_secret).toString('base64'))
         },
         json: true
     };
 
-    request.post(authOptions, function (error, response, body) {
-        if(error || response.statusCode !== 200)
-        {
-            console.log(error);
-            res.redirect('http://localhost:3000');
-        }
-        else
-        {
-            access_token = body.access_token;
-            refresh_token = body.refresh_token;
+    return await axios(authOptions).then(function (response) {
+        return Promise.resolve(response.data.access_token);
 
-            var options = {
-                url: 'https://api.spotify.com/v1/me',
-                headers: { 'Authorization': 'Bearer ' + access_token },
-                json: true
-            };
+        // let options = {
+        //     method: 'get',
+        //     url: 'https://api.spotify.com/v1/me',
+        //     headers: { 'Authorization': 'Bearer ' + access_token },
+        //     json: true
+        // };
 
-            request.get(options, function (error, response, body) {
-                console.log(body);
-                res.redirect('/callback/loggedIn');
-            });
-        }
+        // axios(options)
+        //     .then(response => {console.log(response.data)})
+        //     .catch(error => {console.log(error)});
+    }).catch(function (error) {
+        return Promise.reject(error);
+        // console.log(error);
+        // res.redirect(config.apiUrl);
     });
-});
+}
 
-router.get('/loggedIn', function(req, res, next){
-    console.log('access_token:');
-    console.log(access_token);
-
-    var artists_options = {
+async function getTopArtists(access_token) {
+    let artists_options = {
+        method: 'get',
         url: 'https://api.spotify.com/v1/me/top/artists',
         qs: {limit: 20,
             offset: 0,
@@ -61,55 +68,40 @@ router.get('/loggedIn', function(req, res, next){
         json: true
     };
 
-    request.get(artists_options, function(error, response, body) {
-        if(error || response.statusCode !== 200)
-        {
-            console.log(error);
-            res.redirect('http://localhost:3000');
-        }
-        else {
-            var artists = body.items;
-            var genres = [];
-            artists.forEach(function(item, index, array)
-            {
-                item.genres.forEach(function (genre, index, array) {
-                    if(!genres.includes(genre))
-                    {
-                        genres.push(genre);
-                    }
-                });
-            });
+    return await axios(artists_options).then(function (response) {
+        return Promise.resolve(response.data.items);
+    }).catch(function (error) {
+        return Promise.reject(error);
+    });
+}
 
-            console.log(genres);
-            var search = [];
-            genres.forEach(item => {
-                var main = genre.getMain(item);
-                if(main == null)
-                {
-                    console.log("main is undefined for " + item);
-                }
-                else if(!search.includes(main))
-                {
-                    search.push(main);
-                }
-            });
-
-            console.log(search);
-            if(search.length === 0)
-            {
-                res.send('Error. No genres found');
+function getGenresFromArtists(artists) {
+    let artistsGenres = [];
+    if(artists == null || artists.length === 0) {
+        return artistsGenres;
+    }
+    artists.forEach(function(artist, index, array) {
+        artist.genres.forEach(function (genre, index, array) {
+            if(!artistsGenres.includes(genre)) {
+                artistsGenres.push(genre);
             }
+        });
+    });
+    console.log(artistsGenres);
 
-            var keywords = '';
-            search.forEach(function (item) {
-                keywords = keywords.concat(item, '||');
-            });
-
-            keywords = keywords.substring(0, keywords.length-2);
-            var location = 'Germany';
-            res.redirect('http://localhost:3000/events?keywords=' + keywords + '&location=' + location);
+    let genres = [];
+    artistsGenres.forEach(item => {
+        let main = genre.getMain(item);
+        if(main == null) {
+            console.log("main is undefined for " + item);
+        }
+        else if(!genres.includes(main)) {
+            genres.push(main);
         }
     });
-});
+
+    console.log(genres);
+    return genres;
+}
 
 module.exports = router;

@@ -45,28 +45,28 @@ router.get('/', function (req, res, next) {
         {
             var resultEvents = data.search.events.event;
             console.log('Found ' + data.search.total_items + ' events');
-            if(parseInt(data.search.total_items) === 0)
-            {
-                res.send('Error. No Events found.');
+            if (parseInt(data.search.total_items) === 0) {
+                res.send({events: resultEvents});
+            } else {
+                console.log('Events:');
+                var events = [];
+                for(var i=0; i<resultEvents.length; i++)
+                {
+                    console.log('title: ' + resultEvents[i].title);
+                    var event = {
+                        title: resultEvents[i].title,
+                        start_time: resultEvents[i].start_time,
+                        venue_name: resultEvents[i].venue_name,
+                        venue_address: resultEvents[i].venue_address,
+                        venue_type: resultEvents[i].venue_type,
+                        description: resultEvents[i].description,
+                        performers: resultEvents[i].performers,
+                        city_name: resultEvents[i].city_name
+                    };
+                    events.push(event);
+                }
+                res.send(events);
             }
-            console.log('Events:');
-            var events = [];
-            for(var i=0; i<resultEvents.length; i++)
-            {
-                console.log('title: ' + resultEvents[i].title);
-                var event = {
-                    title: resultEvents[i].title,
-                    start_time: resultEvents[i].start_time,
-                    venue_name: resultEvents[i].venue_name,
-                    venue_address: resultEvents[i].venue_address,
-                    venue_type: resultEvents[i].venue_type,
-                    description: resultEvents[i].description,
-                    performers: resultEvents[i].performers,
-                    city_name: resultEvents[i].city_name
-                };
-                events.push(event);
-            }
-            res.send(events);
         }
     });
 });
