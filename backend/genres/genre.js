@@ -1,9 +1,12 @@
 const yaml = require('js-yaml');
 const fs   = require('fs');
 const readline = require('readline');
+const request = require('request');
+const eventful = require('eventful-node');
+const eventfulGenres = require('./genres-eventful');
 const YAML = require('yaml');
 
-let generate = async function() {
+let generateSpotify = async function() {
     let mainGenres = {
         "african": [],
         "blues": [],
@@ -34,7 +37,7 @@ let generate = async function() {
     }
     let notFoundString = "";
 
-    const fileStream = fs.createReadStream('./genres/genres-raw.txt');
+    const fileStream = fs.createReadStream('./genres-raw-spotify.txt');
     const rl = readline.createInterface({
         input: fileStream,
         crlfDelay: Infinity
@@ -66,13 +69,13 @@ let generate = async function() {
 
     // write to files
     let yamltext = YAML.stringify(genres);
-    fs.writeFile("./genres/genres.yml", yamltext, function(err) {
+    fs.writeFile("./genres-spotify.yml", yamltext, function(err) {
         if (err) {
             return console.log(err);
         }
         console.log("The file was saved!");
     });
-    fs.writeFile("./genres/notFoundGenres.txt", notFoundString, function(err) {
+    fs.writeFile("./notFoundGenres.txt", notFoundString, function(err) {
         if (err) {
             return console.log(err);
         }
@@ -80,8 +83,54 @@ let generate = async function() {
     });
 };
 
+let generateEventful = async function () {
+    const fileStream = fs.createReadStream('./genres-raw-eventful.txt');
+    const rl = readline.createInterface({
+        input: fileStream,
+        crlfDelay: Infinity
+    });
+
+    const client = new eventful.Client('rd6RC8JknxGKq89Q');
+
+    // let foundString = "";
+    for await (const line of rl) {
+        let added = false;
+
+        let options = {
+            keywords: encodeURIComponent(line),
+            page_size: 1
+        };
+
+        await client.searchEvents(options, function (err, data) {
+            console.log(data);
+            if (data) {
+                if (data.search) {
+                    if (err === null && parseInt(data.search.total_items) > 0) {
+                        // foundString += line + "\n";
+                        fs.appendFile('./genres-eventful.txt', line+'\n', function (err) {
+                            if (err) {
+                                return console.log(err);
+                            }
+                            // console.log("The file was updated!");
+                        });
+                    }
+                }
+            }
+        });
+        // console.log(foundString);
+    }
+
+            // if (!added) {
+            //     notFoundString += line + "\n";
+            // }
+};
+
+function isInEventful(genre) {
+    return eventfulGenres.includes(genre);
+}
+
 function getMain(genre) {
-    const o = yaml.safeLoad(fs.readFileSync(__dirname + '/genres.yml', 'utf8'));
+    const o = yaml.safeLoad(fs.readFileSync(__dirname + '/genres-spotify.yml', 'utf8'));
     return searchRecursive(o, genre);
 }
 
@@ -103,7 +152,11 @@ function searchRecursive(object, string) {
     }
 }
 
+// console.log(isInEventful('twin cities indie'))
+// generateEventful();
+// generateSpotify();
+
 module.exports = {
-    generate,
-    getMain
+    getMain,
+    isInEventful
 };

@@ -89,16 +89,32 @@ function getGenresFromArtists(artists) {
     });
     console.log(artistsGenres);
 
-    let genres = [];
-    artistsGenres.forEach(item => {
-        let main = genre.getMain(item);
-        if(main == null) {
-            console.log("main is undefined for " + item);
-        }
-        else if(!genres.includes(main)) {
-            genres.push(main);
-        }
-    });
+            console.log(genres);
+            var search = [];
+            genres.forEach(item => {
+                let newItem = null;
+                if (genre.isInEventful(item)) {
+                    newItem = item;
+                } else {
+                    newItem = genre.getMain(item);
+                }
+                if (!newItem) {
+                    console.log("not adding " + item + " as a genre param");
+                } else if(!search.includes(newItem)){
+                    search.push(newItem);
+                }
+            });
+
+            console.log(search);
+            if(search.length === 0)
+            {
+                res.send('Error. No genres found');
+            }
+
+            var keywords = '';
+            search.forEach(function (item) {
+                keywords = keywords.concat(item, '||');
+            });
 
     console.log(genres);
     return genres;
