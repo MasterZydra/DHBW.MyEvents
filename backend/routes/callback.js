@@ -89,9 +89,8 @@ function getGenresFromArtists(artists) {
     });
     console.log(artistsGenres);
 
-    console.log(genres);
     var search = [];
-    genres.forEach(item => {
+    artistsGenres.forEach(item => {
         let newItem = null;
         // TODO: isInEventful funktioniert korrekt? Keine Genres zurückbekommen
         if (genre.isInEventful(item)) {
@@ -117,8 +116,7 @@ function getGenresFromArtists(artists) {
         keywords = keywords.concat(item, '||');
     });
 
-    console.log(genres);
-    return genres;
+    return keywords;
 }
 
 module.exports = router;
