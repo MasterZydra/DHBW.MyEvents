@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-
+var seperator = '||';
 var eventfulKey = 'rd6RC8JknxGKq89Q';
 const eventful = require('eventful-node');
 const client = new eventful.Client(eventfulKey);
 
 router.get('/', function (req, res, next) {
     var keywords = req.query.keywords;
-    keywords = keywords.split('||');
+    keywords = keywords.split(seperator);
     var options;
     if(keywords.length===1)
     {
@@ -45,6 +45,10 @@ router.get('/', function (req, res, next) {
         {
             var resultEvents = data.search.events.event;
             console.log('Found ' + data.search.total_items + ' events');
+            if(data.search.total_items == 0)
+            {
+                res.send('Error. No Events found.');
+            }
             console.log('Events:');
             var events = [];
             for(var i=0; i<resultEvents.length; i++)
@@ -55,6 +59,7 @@ router.get('/', function (req, res, next) {
                     start_time: resultEvents[i].start_time,
                     venue_name: resultEvents[i].venue_name,
                     venue_address: resultEvents[i].venue_address,
+                    venue_type: resultEvents[i].venue_type,
                     description: resultEvents[i].description,
                     performers: resultEvents[i].performers,
                     city_name: resultEvents[i].city_name
