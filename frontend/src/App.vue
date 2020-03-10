@@ -1,10 +1,8 @@
 <template>
   <v-app>
-    <v-navigation-drawer app></v-navigation-drawer>
-    
     <v-app-bar color="primary" class="white--text" app>MyEvents</v-app-bar>
     <v-content>
-      <v-container fluid>
+      <v-container>
         <router-view></router-view>
       </v-container>
     </v-content>

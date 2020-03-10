@@ -56,7 +56,7 @@ router.get('/loggedIn', function(req, res, next){
         url: 'https://api.spotify.com/v1/me/top/artists',
         qs: {limit: 20,
             offset: 0,
-            time_range: 'short_term'},
+            time_range: 'medium_term'},
         headers: { 'Authorization': 'Bearer ' + access_token },
         json: true
     };
@@ -72,10 +72,10 @@ router.get('/loggedIn', function(req, res, next){
             var genres = [];
             artists.forEach(function(item, index, array)
             {
-                item.genres.forEach(function (item, index, array) {
-                    if(!genres.includes(item))
+                item.genres.forEach(function (genre, index, array) {
+                    if(!genres.includes(genre))
                     {
-                        genres.push(item);
+                        genres.push(genre);
                     }
                 });
             });

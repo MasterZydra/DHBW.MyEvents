@@ -532,6 +532,9 @@ metal:
   - melodic metal
   - symphonic power metal
   - scottish metal
+  - vancouver metal
+  - comic metal
+  - slayer
 mittelalter:
   - hurdy-gurdy
   - medieval folk
@@ -688,6 +691,7 @@ pop:
   - j-poppunk
   - deep neo-synthpop
   - twee indie pop
+  - uk pop
 punk:
   - dance-punk
   - protopunk
@@ -886,6 +890,7 @@ rock:
   - neue deutsche harte
   - australian rock
   - german alternative rock
+  - modern rock
 soul:
   - neo soul
   - vapor soul
