@@ -45,7 +45,7 @@ router.get('/', function (req, res, next) {
         {
             var resultEvents = data.search.events.event;
             console.log('Found ' + data.search.total_items + ' events');
-            if(data.search.total_items == 0)
+            if(parseInt(data.search.total_items) === 0)
             {
                 res.send('Error. No Events found.');
             }
