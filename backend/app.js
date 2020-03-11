@@ -8,7 +8,7 @@ var apiDoc = require('./api-doc');
 var cors = require('cors');
 
 var authenticate = require('./routes/authenticate');
-var events = require('./routes/events');
+var events = require('./routes/getEvents');
 var genres = require('./routes/getGenres');
 var accessToken = require('./routes/getSpotifyAccessToken');
 
@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/authenticate', authenticate.router);
 app.use('/getGenres', genres.router);
-app.use('/events', events.router);
+app.use('/getEvents', events.router);
 app.use('/getSpotifyAccessToken', accessToken.router);
 
 module.exports = app;

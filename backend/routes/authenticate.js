@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const config = require("../config");
 
-let authenticate = function(req, res, next) {
+router.get('/', function(req, res, next){
     if (req.query.hasOwnProperty("redirect_uri")) {
         res.redirect('http://accounts.spotify.com/authorize' +
             '?response_type=code' +
@@ -12,10 +12,6 @@ let authenticate = function(req, res, next) {
     } else {
         res.status(400).send({error: "redirect_uri missing"});
     }
-};
-
-router.get('/', function(req, res, next){
-    authenticate(req, res, next)
 });
 
 module.exports = {

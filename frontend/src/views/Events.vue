@@ -5,11 +5,15 @@
 			<v-chip
 				class="ma-1"
 				color="secondary"
-				v-for="(genre, index) in genres" :key="genre.name"
+				v-for="(genre, index) in genres"
+				@click=""
 			>
-				{{genre.name}}
+				{{genre}}
 			</v-chip>
 		</div>
+		<v-alert v-if="error" type="error">
+			{{error}}
+		</v-alert>
 		<div class="grid">
 			<template v-for="(event, index) in events">
 				<v-hover v-slot:default="{ hover }">
@@ -74,7 +78,7 @@
 				</v-dialog>
 			</template>
 		</div>
-		<v-overlay value="loading">
+		<v-overlay :value="loading">
 			<v-progress-circular indeterminate size="64"></v-progress-circular>
 		</v-overlay>
 	</div>
@@ -88,6 +92,8 @@
 		name: "Events",
 		data: () => ({
 			loading: true,
+			location: "Germany",
+			error: false,
 			events: [
 				{
 					title: "AC/DC-Konzert", start_time:"20.10.2020 20:00", venue_name: "Schleierhalle",
@@ -122,17 +128,28 @@
 					dialog: false
 				}
 			],
-			genres: [
-				{name: "rap"},
-				{name: "hip hop"},
-				{name: "schlager"},
-				{name: "hard rock"},
-				{name: "post-grunge"},
-			]
+			genres: []
 		}),
-		created() {
-			this.getSpotifyAccessToken().then(function (access_token) {
+		async created() {
+			let v = this;
 
+			if (!localStorage.getItem('access_token')) {
+				await v.getSpotifyAccessToken().then(function (access_token) {
+					localStorage.setItem('access_token', access_token);
+				});
+			}
+			let access_token = localStorage.getItem('access_token');
+
+			v.getGenres(access_token).then(function (genres) {
+				console.log(genres);
+				v.genres = genres;
+				return v.getEvents(genres);
+			}).then(function (events) {
+				console.log(events);
+				v.loading = false;
+			}).catch(function (error) {
+				console.log(error);
+				v.error = error;
 			});
 		},
 		methods: {
@@ -141,6 +158,7 @@
 					code: this.$route.query.code,
 					redirect_uri: window.location.origin + window.location.pathname
 				};
+				console.log(data);
 				return await axios.post(config.apiUrl + "getSpotifyAccessToken", data).then(function (response) {
 					return Promise.resolve(response.data);
 				}).catch(function (error) {
@@ -148,10 +166,20 @@
 				});
 			},
 			getGenres: async function (access_token) {
-				let data = {
-					access_token
-				};
+				let data = { access_token };
 				return await axios.post(config.apiUrl + "getGenres", data).then(function (response) {
+					return Promise.resolve(response.data);
+				}).catch(function (error) {
+					return Promise.reject(error);
+				});
+			},
+			getEvents: async function (genres) {
+				let data = {
+					genres,
+					location: this.location,
+					date: "Next week",
+				};
+				return await axios.post(config.apiUrl + "getEvents", data).then(function (response) {
 					return Promise.resolve(response.data);
 				}).catch(function (error) {
 					return Promise.reject(error);
