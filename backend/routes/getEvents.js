@@ -48,7 +48,8 @@ router.post('/', function(req, res, next){
     let location = req.body.location == null ? 'Germany' : req.body.location;
     translateText(location).then(function (translation) {
         location = translation;
-        let keywords = (genres.length === 1) ? genres[0] : genres.join("||");
+        let keywords = (req.body.genres.length === 1) ? req.body.genres[0] : req.body.genres.map(g => "tag: \""+g + "\"").join(' || ');
+        console.log(keywords);
         let options = {
             keywords,
             date: req.body.date,
