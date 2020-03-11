@@ -150,23 +150,28 @@ const apiDoc = {
         "/getSpotifyAccessToken": {
             parameters:[],
             post: {
-                summary: "Returns worlds by name.",
-                operationId:"postWorlds",
+                summary: "Returns Spotify Access Token.",
+                operationId:"postSpotifyAccessToken",
                 parameters: [
                     {
-                        in: "query",
-                        name:"worldName",
+                        in: "header",
+                        name:"code",
                         required:true,
-                        type:"string"
+                        type:"string",
+                        description: "Code from Spotify"
+                    },
+                    {
+                        in: "header",
+                        name: "redirect_uri",
+                        required: true,
+                        type: "string",
+                        description: "URL where Spotify returns to."
                     }],
                 responses: {
                     200: {
-                        description:"A list of worlds that match the requested name.",
+                        description:"Access token from Spotify.",
                         schema:{
-                            type:"array",
-                            items:{
-                                "$ref":"#/definitions/World"
-                            }
+                            type:"string"
                         }
                     },
                     default: {
