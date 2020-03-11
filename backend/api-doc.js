@@ -5,43 +5,42 @@ const apiDoc = {
         title: 'MyEvents - Events matching your music taste',
         version: '1.0.0'
     },
-    definitions: {
-    },
+    definitions: {},
     paths: {
         "/authenticate": {
-            parameters:[],
+            parameters: [],
             get: {
                 summary: "Redirects to authorization page of spotify for this app.",
-                operationId:"getAuthenticate",
+                operationId: "getAuthenticate",
                 parameters: [
                     {
                         in: "query",
-                        name:"redirect_uri",
-                        required:true,
-                        type:"string",
+                        name: "redirect_uri",
+                        required: true,
+                        type: "string",
                         description: "URL where Spotify is returning to."
                     }],
                 responses: {
                     200: {
-                        description:"Returns code from Spotify",
-                        schema:{
-                            type:"string"
+                        description: "Returns code from Spotify",
+                        schema: {
+                            type: "string"
                         }
-                        },
+                    },
                     default: {
                         description: "An error occurred",
                         schema: {
-                            additionalProperties:true
+                            additionalProperties: true
                         }
                     }
                 }
             }
         },
         "/getEvents": {
-            parameters:[],
+            parameters: [],
             post: {
                 summary: "Get events based on your music taste and given location.",
-                operationId:"postEvents",
+                operationId: "postEvents",
                 parameters: [
                     {
                         in: "header",
@@ -52,9 +51,9 @@ const apiDoc = {
                     },
                     {
                         in: "header",
-                        name:"genres",
-                        required:true,
-                        type:"array",
+                        name: "genres",
+                        required: true,
+                        type: "array",
                         items: {
                             type: "string"
                         },
@@ -69,16 +68,16 @@ const apiDoc = {
                     },
                     {
                         in: "header",
-                        name:"page_size",
+                        name: "page_size",
                         required: false,
                         type: "integer",
                         description: "Maximum number of events. Default is 25."
                     }],
                 responses: {
                     200: {
-                        description:"A list of events with their details.",
-                        schema:{
-                            type:"array",
+                        description: "A list of events with their details.",
+                        schema: {
+                            type: "array",
                             items: {
                                 type: "object",
                                 properties: {
@@ -110,31 +109,31 @@ const apiDoc = {
                     default: {
                         description: "An error occurred",
                         schema: {
-                            additionalProperties:true
+                            additionalProperties: true
                         }
                     }
                 }
             }
         },
         "/getGenres": {
-            parameters:[],
+            parameters: [],
             post: {
                 summary: "Returns top listened music genres.",
-                operationId:"postGenres",
+                operationId: "postGenres",
                 parameters: [
                     {
                         in: "header",
-                        name:"access_token",
-                        required:true,
-                        type:"string",
+                        name: "access_token",
+                        required: true,
+                        type: "string",
                         description: "Access token from Spotify"
                     }],
                 responses: {
                     200: {
-                        description:"A list of genres according to listen behaviour of visitor.",
-                        schema:{
+                        description: "A list of genres according to listen behaviour of visitor.",
+                        schema: {
                             type: "array",
-                            items:{
+                            items: {
                                 type: "string"
                             }
                         }
@@ -142,23 +141,23 @@ const apiDoc = {
                     default: {
                         description: "An error occurred",
                         schema: {
-                            additionalProperties:true
+                            additionalProperties: true
                         }
                     }
                 }
             }
         },
         "/getSpotifyAccessToken": {
-            parameters:[],
+            parameters: [],
             post: {
                 summary: "Returns Spotify Access Token.",
-                operationId:"postSpotifyAccessToken",
+                operationId: "postSpotifyAccessToken",
                 parameters: [
                     {
                         in: "header",
-                        name:"code",
-                        required:true,
-                        type:"string",
+                        name: "code",
+                        required: true,
+                        type: "string",
                         description: "Code from Spotify"
                     },
                     {
@@ -170,15 +169,15 @@ const apiDoc = {
                     }],
                 responses: {
                     200: {
-                        description:"Access token from Spotify.",
-                        schema:{
-                            type:"string"
+                        description: "Access token from Spotify.",
+                        schema: {
+                            type: "string"
                         }
                     },
                     default: {
                         description: "An error occurred",
                         schema: {
-                            additionalProperties:true
+                            additionalProperties: true
                         }
                     }
                 }
