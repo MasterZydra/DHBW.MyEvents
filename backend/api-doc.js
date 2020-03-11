@@ -119,22 +119,23 @@ const apiDoc = {
         "/getGenres": {
             parameters:[],
             post: {
-                summary: "Returns worlds by name.",
-                operationId:"postWorlds",
+                summary: "Returns top listened music genres.",
+                operationId:"postGenres",
                 parameters: [
                     {
-                        in: "query",
-                        name:"worldName",
+                        in: "header",
+                        name:"access_token",
                         required:true,
-                        type:"string"
+                        type:"string",
+                        description: "Access token from Spotify"
                     }],
                 responses: {
                     200: {
-                        description:"A list of worlds that match the requested name.",
+                        description:"A list of genres according to listen behaviour of visitor.",
                         schema:{
-                            type:"array",
+                            type: "array",
                             items:{
-                                "$ref":"#/definitions/World"
+                                type: "string"
                             }
                         }
                     },
