@@ -5,26 +5,23 @@ var eventfulKey = 'rd6RC8JknxGKq89Q';
 const eventful = require('eventful-node');
 const client = new eventful.Client(eventfulKey);
 
-router.get('/', function (req, res, next) {
+let getEvents = function (req, res, next) {
     var keywords = req.query.keywords;
     keywords = keywords.split(seperator);
     var options;
-    if(keywords.length===1)
-    {
+    if (keywords.length === 1) {
         options = {
             keywords: keywords[0],
             date: 'Next Week',
             location: req.query.location,
             page_size: 25
         };
-    }
-    else
-    {
+    } else {
         var q = '';
         keywords.forEach(item => {
             q = q.concat('tag:' + item + ' || ');
         });
-        q = q.substring(0, q.length-3);
+        q = q.substring(0, q.length - 3);
 
         options = {
             keywords: q,
@@ -37,22 +34,17 @@ router.get('/', function (req, res, next) {
     console.log(options);
 
     client.searchEvents(options, function (err, data) {
-        if(err)
-        {
+        if (err) {
             res.send(err);
-        }
-        else
-        {
+        } else {
             var resultEvents = data.search.events.event;
             console.log('Found ' + data.search.total_items + ' events');
-            if(parseInt(data.search.total_items) === 0)
-            {
+            if (parseInt(data.search.total_items) === 0) {
                 res.send('Error. No Events found.');
             }
             console.log('Events:');
             var events = [];
-            for(var i=0; i<resultEvents.length; i++)
-            {
+            for (var i = 0; i < resultEvents.length; i++) {
                 console.log('title: ' + resultEvents[i].title);
                 var event = {
                     title: resultEvents[i].title,
@@ -69,6 +61,45 @@ router.get('/', function (req, res, next) {
             res.send(events);
         }
     });
+};
+
+router.get('/', function(req, res, next){
+    getEvents(req, res, next)
 });
 
-module.exports = router;
+module.exports = {
+    get: function(req, res, next){
+        getEvents(req, res, next)
+    },
+    router
+};
+
+module.exports.get.apiDoc = {
+    summary: 'Returns worlds by name.',
+    operationId: 'getWorlds',
+    parameters: [
+        {
+            in: 'query',
+            name: 'worldName',
+            required: true,
+            type: 'string'
+        }
+    ],
+    responses: {
+        200: {
+            description: 'A list of worlds that match the requested name.',
+            schema: {
+                type: 'array',
+                items: {
+                    $ref: '#/definitions/World'
+                }
+            }
+        },
+        default: {
+            description: 'An error occurred',
+            schema: {
+                additionalProperties: true
+            }
+        }
+    }
+};
