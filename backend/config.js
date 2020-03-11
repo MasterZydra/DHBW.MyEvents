@@ -6,5 +6,11 @@ module.exports = {
         client_secret: "0085f87a56cb4e40a6a15e556c01ade9",
         scope: 'user-read-private user-read-email user-top-read',
         redirect_uri: apiUrl + "/callback"
+    },
+    eventful: {
+        eventfulKey: 'rd6RC8JknxGKq89Q'
+    },
+    google: {
+        translationKey: 'AIzaSyDWImxfSpg-zSnBhlOHk9w-sV79pItFEDQ'
     }
 };
