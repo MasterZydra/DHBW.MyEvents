@@ -1,32 +1,9 @@
-var express = require('express');
-let axios = require('axios');
-var router = express.Router();
+const express = require('express');
+const axios = require('axios');
+const router = express.Router();
 const config = require("../config");
-var seperator = '||';
 const eventful = require('eventful-node');
 const client = new eventful.Client(config.eventful.eventfulKey);
-
-let execute = function (req, res, next) {
-    let location = req.query.location == null ? 'Germany' : req.query.location;
-    translateText(location).then(function (translation) {
-        location = translation;
-
-        var options = fillOptions(req.query.keywords, location);
-        console.log(options);
-
-        client.searchEvents(options, function (err, data) {
-            if (err) {
-                res.send(err);
-            } else {
-                let events = fillEvents(data);
-                res.send(events);
-            }
-        });
-    })
-        .catch(function (error) {
-            res.send(error);
-        });
-};
 
 async function translateText(text) {
     let url = 'https://translation.googleapis.com/language/translate/v2?'
@@ -39,33 +16,6 @@ async function translateText(text) {
     }).catch(function (error) {
         return Promise.reject(error);
     });
-}
-
-function fillOptions(keywords, location) {
-    keywords = keywords.split(seperator);
-    var options;
-    if (keywords.length === 1) {
-        options = {
-            keywords: keywords[0],
-            date: 'Next Week',
-            location: location,
-            page_size: 25
-        };
-    } else {
-        var q = '';
-        keywords.forEach(item => {
-            q = q.concat('tag:' + item + ' || ');
-        });
-        q = q.substring(0, q.length - 3);
-
-        options = {
-            keywords: q,
-            date: 'Next Week',
-            location: location,
-            page_size: 25
-        };
-    }
-    return options;
 }
 
 function fillEvents(data) {
@@ -94,8 +44,29 @@ function fillEvents(data) {
     }
 }
 
-router.get('/', function(req, res, next){
-    execute(req, res, next)
+router.post('/', function(req, res, next){
+    let location = req.body.location == null ? 'Germany' : req.body.location;
+    translateText(location).then(function (translation) {
+        location = translation;
+        let keywords = (genres.length === 1) ? genres[0] : genres.join("||");
+        let options = {
+            keywords,
+            date: req.body.date,
+            location,
+            page_size: req.body.page_size || 25
+        };
+
+        client.searchEvents(options, function (err, data) {
+            if (err) {
+                res.send(err);
+            } else {
+                let events = fillEvents(data);
+                res.send(events);
+            }
+        });
+    }).catch(function (error) {
+        res.send(error);
+    });
 });
 
 module.exports = {

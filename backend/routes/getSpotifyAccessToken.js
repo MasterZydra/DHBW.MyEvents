@@ -1,16 +1,7 @@
-var express = require('express');
-var axios = require('axios');
-var router = express.Router();
+const express = require('express');
+const axios = require('axios');
+const router = express.Router();
 const config = require("../config");
-
-let execute = function (req, res, next) {
-    getSpotifyAccessToken(req.body.code, req.body.redirect_uri).then(function (access_token) {
-        res.send(access_token);
-    }).catch(function (error) {
-        console.log(error);
-        res.status(error.response.status).send(error.response.statusText);
-    });
-};
 
 async function getSpotifyAccessToken(code, redirect_uri) {
     let data = 'code=' + code + '&redirect_uri=' + redirect_uri + '&grant_type=authorization_code';
@@ -33,7 +24,12 @@ async function getSpotifyAccessToken(code, redirect_uri) {
 }
 
 router.post('/', function(req, res, next) {
-    execute(req, res, next);
+    getSpotifyAccessToken(req.body.code, req.body.redirect_uri).then(function (access_token) {
+        res.send(access_token);
+    }).catch(function (error) {
+        console.log(error);
+        res.status(error.response.status).send(error.response.statusText);
+    });
 });
 
 module.exports = {
