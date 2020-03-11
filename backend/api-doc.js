@@ -51,24 +51,24 @@ const apiDoc = {
                         description: "Location where the event will be searched"
                     },
                     {
-                        in: "query",
+                        in: "header",
                         name:"genres",
                         required:true,
                         type:"array",
                         items: {
                             type: "string"
                         },
-                        description: "Genres for which events are searched"
+                        description: "Genres for which events are searched."
                     },
                     {
-                        in: "query",
+                        in: "header",
                         name: "date",
                         required: false,
                         type: "string",
-                        description: "Period in which to search"
+                        description: "Period in which to search."
                     },
                     {
-                        in: "query",
+                        in: "header",
                         name:"page_size",
                         required: false,
                         type: "integer",
