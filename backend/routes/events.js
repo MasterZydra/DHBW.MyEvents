@@ -6,7 +6,7 @@ var seperator = '||';
 const eventful = require('eventful-node');
 const client = new eventful.Client(config.eventful.eventfulKey);
 
-let events = function (req, res, next) {
+let execute = function (req, res, next) {
     let location = req.query.location == null ? 'Germany' : req.query.location;
     translateText(location).then(function (translation) {
         location = translation;
@@ -95,12 +95,12 @@ function fillEvents(data) {
 }
 
 router.get('/', function(req, res, next){
-    events(req, res, next)
+    execute(req, res, next)
 });
 
 module.exports = {
     get: function(req, res, next){
-        events(req, res, next)
+        execute(req, res, next)
     },
     router
 };
