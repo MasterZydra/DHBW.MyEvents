@@ -4,18 +4,18 @@ let router = express.Router();
 const genre = require('../genres/genre.js');
 const config = require("../config");
 
-router.get('/', function (req, res, next) {
+let execute = function (req, res, next) {
     let access_token = req.body.access_token;
-
     getTopArtists(access_token).then(function (artists) {
         let genres = getGenresFromArtists(artists);
         res.send(genres);
     }).catch(function (error) {
         res.send(error);
     });
-});
+};
 
 async function getTopArtists(access_token) {
+
     let artists_options = {
         method: 'get',
         url: 'https://api.spotify.com/v1/me/top/artists',
@@ -25,15 +25,15 @@ async function getTopArtists(access_token) {
         headers: { 'Authorization': 'Bearer ' + access_token },
         json: true
     };
-
     return await axios(artists_options).then(function (response) {
         return Promise.resolve(response.data.items);
     }).catch(function (error) {
         return Promise.reject(error);
     });
-}
 
+}
 function getGenresFromArtists(artists) {
+
     let artistsGenres = [];
     if(artists == null || artists.length === 0) {
         return artistsGenres;
@@ -45,8 +45,8 @@ function getGenresFromArtists(artists) {
             }
         });
     });
-
     let genres = [];
+
     artistsGenres.forEach(item => {
         let newItem = null;
         if (genre.isInEventful(item)) {
@@ -63,4 +63,43 @@ function getGenresFromArtists(artists) {
     return genres;
 }
 
-module.exports = router;
+router.get('/', function (req, res, next) {
+    execute(req, res, next);
+});
+
+module.exports = {
+    get: function(req, res, next){
+        execute(req, res, next);
+    },
+    router
+};
+
+module.exports.get.apiDoc = {
+    summary: 'Returns worlds by name.',
+    operationId: 'getWorlds',
+    parameters: [
+        {
+            in: 'query',
+            name: 'worldName',
+            required: true,
+            type: 'string'
+        }
+    ],
+    responses: {
+        200: {
+            description: 'A list of worlds that match the requested name.',
+            schema: {
+                type: 'array',
+                items: {
+                    $ref: '#/definitions/World'
+                }
+            }
+        },
+        default: {
+            description: 'An error occurred',
+            schema: {
+                additionalProperties: true
+            }
+        }
+    }
+};
