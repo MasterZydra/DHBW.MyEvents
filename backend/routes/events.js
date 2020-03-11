@@ -99,38 +99,5 @@ router.get('/', function(req, res, next){
 });
 
 module.exports = {
-    get: function(req, res, next){
-        execute(req, res, next)
-    },
     router
-};
-
-module.exports.get.apiDoc = {
-    summary: 'Returns worlds by name.',
-    operationId: 'getWorlds',
-    parameters: [
-        {
-            in: 'query',
-            name: 'worldName',
-            required: true,
-            type: 'string'
-        }
-    ],
-    responses: {
-        200: {
-            description: 'A list of worlds that match the requested name.',
-            schema: {
-                type: 'array',
-                items: {
-                    $ref: '#/definitions/World'
-                }
-            }
-        },
-        default: {
-            description: 'An error occurred',
-            schema: {
-                additionalProperties: true
-            }
-        }
-    }
 };
