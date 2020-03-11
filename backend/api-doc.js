@@ -5,45 +5,42 @@ const apiDoc = {
         title: 'MyEvents - Events matching your music taste',
         version: '1.0.0'
     },
-    definitions: {
-    },
+    definitions: {},
     paths: {
         "/authenticate": {
-            parameters:[],
-            post: {
-                summary: "Returns worlds by name.",
-                operationId:"postWorlds",
+            parameters: [],
+            get: {
+                summary: "Redirects to authorization page of spotify for this app.",
+                operationId: "getAuthenticate",
                 parameters: [
                     {
                         in: "query",
-                        name:"worldName",
-                        required:true,
-                        type:"string"
+                        name: "redirect_uri",
+                        required: true,
+                        type: "string",
+                        description: "URL where Spotify is returning to."
                     }],
                 responses: {
                     200: {
-                        description:"A list of worlds that match the requested name.",
-                        schema:{
-                            type:"array",
-                            items:{
-                                "$ref":"#/definitions/World"
-                            }
+                        description: "Returns code from Spotify",
+                        schema: {
+                            type: "string"
                         }
-                        },
+                    },
                     default: {
                         description: "An error occurred",
                         schema: {
-                            additionalProperties:true
+                            additionalProperties: true
                         }
                     }
                 }
             }
         },
         "/getEvents": {
-            parameters:[],
+            parameters: [],
             post: {
                 summary: "Get events based on your music taste and given location.",
-                operationId:"postEvents",
+                operationId: "postEvents",
                 parameters: [
                     {
                         in: "header",
@@ -53,34 +50,34 @@ const apiDoc = {
                         description: "Location where the event will be searched"
                     },
                     {
-                        in: "query",
-                        name:"genres",
-                        required:true,
-                        type:"array",
+                        in: "header",
+                        name: "genres",
+                        required: true,
+                        type: "array",
                         items: {
                             type: "string"
                         },
-                        description: "Genres for which events are searched"
+                        description: "Genres for which events are searched."
                     },
                     {
-                        in: "query",
+                        in: "header",
                         name: "date",
                         required: false,
                         type: "string",
-                        description: "Period in which to search"
+                        description: "Period in which to search."
                     },
                     {
-                        in: "query",
-                        name:"page_size",
+                        in: "header",
+                        name: "page_size",
                         required: false,
                         type: "integer",
                         description: "Maximum number of events. Default is 25."
                     }],
                 responses: {
                     200: {
-                        description:"A list of events with their details.",
-                        schema:{
-                            type:"array",
+                        description: "A list of events with their details.",
+                        schema: {
+                            type: "array",
                             items: {
                                 type: "object",
                                 properties: {
@@ -112,69 +109,75 @@ const apiDoc = {
                     default: {
                         description: "An error occurred",
                         schema: {
-                            additionalProperties:true
+                            additionalProperties: true
                         }
                     }
                 }
             }
         },
         "/getGenres": {
-            parameters:[],
+            parameters: [],
             post: {
-                summary: "Returns worlds by name.",
-                operationId:"postWorlds",
+                summary: "Returns top listened music genres.",
+                operationId: "postGenres",
                 parameters: [
                     {
-                        in: "query",
-                        name:"worldName",
-                        required:true,
-                        type:"string"
+                        in: "header",
+                        name: "access_token",
+                        required: true,
+                        type: "string",
+                        description: "Access token from Spotify"
                     }],
                 responses: {
                     200: {
-                        description:"A list of worlds that match the requested name.",
-                        schema:{
-                            type:"array",
-                            items:{
-                                "$ref":"#/definitions/World"
+                        description: "A list of genres according to listen behaviour of visitor.",
+                        schema: {
+                            type: "array",
+                            items: {
+                                type: "string"
                             }
                         }
                     },
                     default: {
                         description: "An error occurred",
                         schema: {
-                            additionalProperties:true
+                            additionalProperties: true
                         }
                     }
                 }
             }
         },
         "/getSpotifyAccessToken": {
-            parameters:[],
+            parameters: [],
             post: {
-                summary: "Returns worlds by name.",
-                operationId:"postWorlds",
+                summary: "Returns Spotify Access Token.",
+                operationId: "postSpotifyAccessToken",
                 parameters: [
                     {
-                        in: "query",
-                        name:"worldName",
-                        required:true,
-                        type:"string"
+                        in: "header",
+                        name: "code",
+                        required: true,
+                        type: "string",
+                        description: "Code from Spotify"
+                    },
+                    {
+                        in: "header",
+                        name: "redirect_uri",
+                        required: true,
+                        type: "string",
+                        description: "URL where Spotify returns to."
                     }],
                 responses: {
                     200: {
-                        description:"A list of worlds that match the requested name.",
-                        schema:{
-                            type:"array",
-                            items:{
-                                "$ref":"#/definitions/World"
-                            }
+                        description: "Access token from Spotify.",
+                        schema: {
+                            type: "string"
                         }
                     },
                     default: {
                         description: "An error occurred",
                         schema: {
-                            additionalProperties:true
+                            additionalProperties: true
                         }
                     }
                 }
