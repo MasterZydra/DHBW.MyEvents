@@ -5,7 +5,6 @@ var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
 var expressOpenApi = require('express-openapi');
 var apiDoc = require('./api-doc');
-var path = require('path');
 var cors = require('cors');
 
 var authenticate = require('./routes/authenticate');
