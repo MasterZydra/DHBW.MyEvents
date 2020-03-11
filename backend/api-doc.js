@@ -10,24 +10,22 @@ const apiDoc = {
     paths: {
         "/authenticate": {
             parameters:[],
-            post: {
-                summary: "Returns worlds by name.",
-                operationId:"postWorlds",
+            get: {
+                summary: "Redirects to authorization page of spotify for this app.",
+                operationId:"getAuthenticate",
                 parameters: [
                     {
                         in: "query",
-                        name:"worldName",
+                        name:"redirect_uri",
                         required:true,
-                        type:"string"
+                        type:"string",
+                        description: "URL where Spotify is returning to."
                     }],
                 responses: {
                     200: {
-                        description:"A list of worlds that match the requested name.",
+                        description:"Returns code from Spotify",
                         schema:{
-                            type:"array",
-                            items:{
-                                "$ref":"#/definitions/World"
-                            }
+                            type:"string"
                         }
                         },
                     default: {
