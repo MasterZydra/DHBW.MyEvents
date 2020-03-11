@@ -6,7 +6,7 @@ var seperator = '||';
 const eventful = require('eventful-node');
 const client = new eventful.Client(config.eventful.eventfulKey);
 
-router.get('/', function (req, res, next) {
+let events = function (req, res, next) {
     let location = req.query.location == null ? 'Germany' : req.query.location;
     translateText(location).then(function (translation) {
         location = translation;
@@ -26,7 +26,7 @@ router.get('/', function (req, res, next) {
         .catch(function (error) {
             res.send(error);
         });
-});
+};
 
 async function translateText(text) {
     let url = 'https://translation.googleapis.com/language/translate/v2?'
@@ -94,4 +94,43 @@ function fillEvents(data) {
     }
 }
 
-module.exports = router;
+router.get('/', function(req, res, next){
+    events(req, res, next)
+});
+
+module.exports = {
+    get: function(req, res, next){
+        events(req, res, next)
+    },
+    router
+};
+
+module.exports.get.apiDoc = {
+    summary: 'Returns worlds by name.',
+    operationId: 'getWorlds',
+    parameters: [
+        {
+            in: 'query',
+            name: 'worldName',
+            required: true,
+            type: 'string'
+        }
+    ],
+    responses: {
+        200: {
+            description: 'A list of worlds that match the requested name.',
+            schema: {
+                type: 'array',
+                items: {
+                    $ref: '#/definitions/World'
+                }
+            }
+        },
+        default: {
+            description: 'An error occurred',
+            schema: {
+                additionalProperties: true
+            }
+        }
+    }
+};
