@@ -7,13 +7,15 @@ var expressOpenApi = require('express-openapi');
 var apiDoc = require('./api-doc');
 var path = require('path');
 
-var authenticateRouter = require('./routes/authenticate');
-var callbackRouter = require('./routes/callback');
+var authenticate = require('./routes/authenticate');
+var callback = require('./routes/callback');
 var events = require('./routes/events');
 
 var app = express();
 
 var paths = [
+  { path: '/authenticate', module: require('./routes/authenticate')},
+  { path: '/callback', module: require('./routes/callback') },
   { path: '/events', module: require('./routes/events') }
 ];
 
@@ -40,8 +42,8 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/authenticate', authenticateRouter);
-app.use('/callback', callbackRouter);
+app.use('/authenticate', authenticate.router);
+app.use('/callback', callback.router);
 app.use('/events', events.router);
 
 module.exports = app;

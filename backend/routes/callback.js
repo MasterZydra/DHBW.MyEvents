@@ -7,7 +7,7 @@ var client_secret = '0085f87a56cb4e40a6a15e556c01ade9';
 var access_token;
 var refresh_token;
 
-router.get('/', function (req, res, next) {
+let callback = function (req, res, next) {
     var code = req.query.code;
 
     var authOptions = {
@@ -46,7 +46,7 @@ router.get('/', function (req, res, next) {
             });
         }
     });
-});
+}
 
 router.get('/loggedIn', function(req, res, next){
     console.log('access_token:');
@@ -112,4 +112,43 @@ router.get('/loggedIn', function(req, res, next){
     });
 });
 
-module.exports = router;
+router.get('/', function(req, res, next){
+    callback(req, res, next)
+});
+
+module.exports = {
+    get: function(req, res, next){
+        callback(req, res, next)
+    },
+    router
+};
+
+module.exports.get.apiDoc = {
+    summary: 'Returns worlds by name.',
+    operationId: 'getWorlds',
+    parameters: [
+        {
+            in: 'query',
+            name: 'worldName',
+            required: true,
+            type: 'string'
+        }
+    ],
+    responses: {
+        200: {
+            description: 'A list of worlds that match the requested name.',
+            schema: {
+                type: 'array',
+                items: {
+                    $ref: '#/definitions/World'
+                }
+            }
+        },
+        default: {
+            description: 'An error occurred',
+            schema: {
+                additionalProperties: true
+            }
+        }
+    }
+};
