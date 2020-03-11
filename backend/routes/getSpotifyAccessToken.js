@@ -59,8 +59,7 @@ router.post('/refresh', function (req, res, next) {
     refreshToken(req.body.refresh_token).then(function (access_token) {
         res.send(access_token);
     }).catch(function (error) {
-        console.log(error);
-        res.status(error.response.status).send(error.response.statusText);
+        res.sendStatus(error.response.status);
     })
 });
 

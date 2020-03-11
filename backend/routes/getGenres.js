@@ -57,7 +57,7 @@ router.post('/', function (req, res, next) {
         let genres = getGenresFromArtists(artists);
         res.send(genres);
     }).catch(function (error) {
-        res.send(error);
+        res.sendStatus(error.response.status);
     });
 });
 

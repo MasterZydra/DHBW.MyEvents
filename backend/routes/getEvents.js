@@ -28,6 +28,12 @@ function fillEvents(data) {
         let events = [];
         for (let i = 0; i < resultEvents.length; i++) {
             console.log('title: ' + resultEvents[i].title);
+
+            let performers = Array.isArray(resultEvents[i].performers.performer) ?
+                resultEvents[i].performers.performer.map(p => p.name) :
+                (resultEvents[i].performers.hasOwnProperty("performer")) ?
+                    [resultEvents[i].performers.performer.name] :
+                    [];
             let event = {
                 title: resultEvents[i].title,
                 start_time: resultEvents[i].start_time,
@@ -35,7 +41,7 @@ function fillEvents(data) {
                 venue_address: resultEvents[i].venue_address,
                 venue_type: resultEvents[i].venue_type,
                 description: resultEvents[i].description,
-                performers: resultEvents[i].performers,
+                performers,
                 city_name: resultEvents[i].city_name
             };
             events.push(event);

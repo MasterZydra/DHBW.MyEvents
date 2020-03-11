@@ -19,6 +19,10 @@
                 // return config.apiUrl + "authenticate";
             }
         },
+        created() {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+        }
         // methods: {
         //     login() {
         //         let axiosOptions = {

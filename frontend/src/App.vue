@@ -26,4 +26,7 @@ export default {
     background-color: #509BF5;
     background-image: linear-gradient(#C074B2, #8AB5E8);
   }
+  .container {
+    padding: 1.5rem !important;
+  }
 </style>
