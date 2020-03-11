@@ -52,7 +52,7 @@ router.post('/', function(req, res, next){
         console.log(keywords);
         let options = {
             keywords,
-            date: req.body.date,
+            date: req.body.date || 'Next week',
             location,
             page_size: req.body.page_size || 25
         };
