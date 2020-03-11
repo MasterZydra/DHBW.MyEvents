@@ -39,25 +39,73 @@ const apiDoc = {
                 }
             }
         },
-        "/events": {
+        "/getEvents": {
             parameters:[],
             post: {
-                summary: "Returns worlds by name.",
-                operationId:"postWorlds",
+                summary: "Get events based on your music taste and given location.",
+                operationId:"postEvents",
                 parameters: [
                     {
+                        in: "header",
+                        name: "location",
+                        required: false,
+                        type: "string",
+                        description: "Location where the event will be searched"
+                    },
+                    {
                         in: "query",
-                        name:"worldName",
+                        name:"genres",
                         required:true,
-                        type:"string"
+                        type:"array",
+                        items: {
+                            type: "string"
+                        },
+                        description: "Genres for which events are searched"
+                    },
+                    {
+                        in: "query",
+                        name: "date",
+                        required: false,
+                        type: "string",
+                        description: "Period in which to search"
+                    },
+                    {
+                        in: "query",
+                        name:"page_size",
+                        required: false,
+                        type: "integer",
+                        description: "Maximum number of events. Default is 25."
                     }],
                 responses: {
                     200: {
-                        description:"A list of worlds that match the requested name.",
+                        description:"A list of events with their details.",
                         schema:{
                             type:"array",
-                            items:{
-                                "$ref":"#/definitions/World"
+                            items: {
+                                type: "object",
+                                properties: {
+                                    title: {
+                                        type: "string"
+                                    },
+                                    start_time: {
+                                        type: "string"
+                                    },
+                                    venue_name: {
+                                        type: "string"
+                                    },
+                                    venue_address: {
+                                        type: "string"
+                                    },
+                                    description: {
+                                        type: "string"
+                                    },
+                                    performers: {
+                                        type: "object"
+                                    },
+                                    city_name: {
+                                        type: "string"
+                                    }
+                                }
                             }
                         }
                     },
