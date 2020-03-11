@@ -16,22 +16,11 @@ var accessToken = require('./routes/getSpotifyAccessToken');
 var app = express();
 app.use(cors());
 
-var paths = [
-  { path: '/authenticate', module: require('./routes/authenticate')},
-  { path: '/events', module: require('./routes/events') },
-  { path: '/getGenres', module: require('./routes/getGenres') },
-  { path: '/getSpotifyAccessToken', module: require('./routes/getSpotifyAccessToken') },
-];
-
+var paths = [];
 expressOpenApi.initialize({
   apiDoc: apiDoc,
   app: app,
-  paths: paths,
-
-  promiseMode: true,
-  securityFilter: async (req, res) => {
-    res.status(200).json(req.apiDoc);
-  }
+  paths: paths
 });
 
 app.use(logger('dev'));
