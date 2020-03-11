@@ -3,14 +3,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
+var cors = require('cors');
 
 var indexRouter = require('./routes');
 var usersRouter = require('./routes/users');
 var authenticateRouter = require('./routes/authenticate');
-var callbackRouter = require('./routes/callback');
+var genresRouter = require('./routes/getGenres');
 var eventsRoute = require('./routes/events');
+var accessTokenRouter = require('./routes/getSpotifyAccessToken');
 
 var app = express();
+app.use(cors());
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -27,7 +30,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/authenticate', authenticateRouter);
-app.use('/callback', callbackRouter);
+app.use('/getGenres', genresRouter);
 app.use('/events', eventsRoute);
+app.use('/getSpotifyAccessToken', accessTokenRouter);
 
 module.exports = app;

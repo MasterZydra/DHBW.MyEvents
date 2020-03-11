@@ -74,13 +74,20 @@
 				</v-dialog>
 			</template>
 		</div>
+		<v-overlay value="loading">
+			<v-progress-circular indeterminate size="64"></v-progress-circular>
+		</v-overlay>
 	</div>
 </template>
 
 <script>
+	import axios from "axios";
+	import config from "../config";
+
 	export default {
 		name: "Events",
 		data: () => ({
+			loading: true,
 			events: [
 				{
 					title: "AC/DC-Konzert", start_time:"20.10.2020 20:00", venue_name: "Schleierhalle",
@@ -123,6 +130,34 @@
 				{name: "post-grunge"},
 			]
 		}),
+		created() {
+			this.getSpotifyAccessToken().then(function (access_token) {
+
+			});
+		},
+		methods: {
+			getSpotifyAccessToken: async function() {
+				let data = {
+					code: this.$route.query.code,
+					redirect_uri: window.location.origin + window.location.pathname
+				};
+				return await axios.post(config.apiUrl + "getSpotifyAccessToken", data).then(function (response) {
+					return Promise.resolve(response.data);
+				}).catch(function (error) {
+					return Promise.reject(error);
+				});
+			},
+			getGenres: async function (access_token) {
+				let data = {
+					access_token
+				};
+				return await axios.post(config.apiUrl + "getGenres", data).then(function (response) {
+					return Promise.resolve(response.data);
+				}).catch(function (error) {
+					return Promise.reject(error);
+				});
+			}
+		}
 	}
 </script>
 
