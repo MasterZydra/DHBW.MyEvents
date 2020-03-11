@@ -7,5 +7,10 @@ module.exports = {
         scope: 'user-read-private user-read-email user-top-read',
         redirect_uri: apiUrl + "/callback"
     },
-    eventfulKey: "rd6RC8JknxGKq89Q",
+    eventful: {
+        eventfulKey: 'rd6RC8JknxGKq89Q'
+    },
+    google: {
+        translationKey: 'AIzaSyDWImxfSpg-zSnBhlOHk9w-sV79pItFEDQ'
+    }
 };
