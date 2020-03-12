@@ -35,7 +35,7 @@ function fillEvents(data) {
                     [resultEvents[i].performers.performer.name] :
                     [];
             let event = {
-                title: resultEvents[i].title,
+                title: decodeURIComponent(JSON.parse('"' + resultEvents[i].title + '"')),
                 start_time: resultEvents[i].start_time,
                 venue_name: resultEvents[i].venue_name,
                 venue_address: resultEvents[i].venue_address,
