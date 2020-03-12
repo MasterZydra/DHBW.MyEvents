@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar color="primary" class="white--text" app>MyEvents</v-app-bar>
+    <v-app-bar color="primary" class="white--text title font-weight-black" app>MyEvents</v-app-bar>
     <v-content>
       <v-container>
         <router-view></router-view>

@@ -52,29 +52,34 @@
 							<div class="headline font-weight-black">
 								{{event.title}}
 							</div>
-							<div class="text-truncate" v-if="event.performers.length > 0">
-								<v-icon>mdi-music-note-eighth</v-icon>
-								<span>
+							<div>
+								<div class="text-truncate" v-if="event.performers.length > 0">
+									<v-icon>mdi-music-note-eighth</v-icon>
+									<span>
 									{{event.performers.join(', ')}}
 								</span>
-							</div>
-							<div class="text-truncate">
-								<v-icon>mdi-calendar</v-icon>
-								<span>
+								</div>
+								<div class="text-truncate">
+									<v-icon>mdi-calendar</v-icon>
+									<span>
 									{{event.start_time}}
 								</span>
-							</div>
-							<div class="text-truncate">
-								<v-icon>mdi-map-marker</v-icon>
-								<span>
+								</div>
+								<div class="text-truncate">
+									<v-icon>mdi-map-marker</v-icon>
+									<span>
 									{{event.city_name}}, {{event.venue_name}}
 								</span>
+								</div>
 							</div>
 						</div>
 					</v-card>
 				</v-hover>
 				<v-dialog v-model="event.dialog" max-width="600px">
 					<v-card>
+						<div class="image-container" v-if="event.image !== ''">
+							<v-img :src="event.image" contain></v-img>
+						</div>
 						<v-card-title class="headline">{{event.title}}</v-card-title>
 						<v-card-text>
 							<p v-if="event.description" v-html="event.description"></p>
@@ -281,7 +286,6 @@
 				}
 			},
 
-
 			validate () {
 				this.$refs.form.validate()
 			},
@@ -300,6 +304,7 @@
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
+		margin-bottom: 1rem;
 	}
 	.event:hover {
 		cursor: pointer;
@@ -316,5 +321,9 @@
 		position: absolute;
 		bottom: 0;
 		margin-bottom: 1rem;
+	}
+	.image-container {
+		display: flex;
+		height: 255px;
 	}
 </style>
