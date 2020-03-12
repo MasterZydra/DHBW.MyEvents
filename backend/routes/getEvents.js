@@ -35,9 +35,10 @@ function fillEvents(data) {
                     [resultEvents[i].performers.performer.name] :
                     [];
 
-            let title = resultEvents[i].title.includes("\\") ?
+            let title = !resultEvents[i].title.includes("\"") ?
                 decodeURIComponent(JSON.parse('"' + resultEvents[i].title + '"'))  :
                 resultEvents[i].title;
+            let image = resultEvents[i].image.url ? resultEvents[i].image.url.replace('small', 'large') : "";
             let event = {
                 title,
                 start_time: resultEvents[i].start_time,
@@ -46,7 +47,8 @@ function fillEvents(data) {
                 venue_type: resultEvents[i].venue_type,
                 description: resultEvents[i].description,
                 performers,
-                city_name: resultEvents[i].city_name
+                city_name: resultEvents[i].city_name,
+                image
             };
             events.push(event);
         }
