@@ -34,8 +34,12 @@ function fillEvents(data) {
                 (resultEvents[i].performers.hasOwnProperty("performer")) ?
                     [resultEvents[i].performers.performer.name] :
                     [];
+
+            let title = resultEvents[i].title.includes("\\") ?
+                decodeURIComponent(JSON.parse('"' + resultEvents[i].title + '"'))  :
+                resultEvents[i].title;
             let event = {
-                title: decodeURIComponent(JSON.parse('"' + resultEvents[i].title + '"')),
+                title,
                 start_time: resultEvents[i].start_time,
                 venue_name: resultEvents[i].venue_name,
                 venue_address: resultEvents[i].venue_address,
