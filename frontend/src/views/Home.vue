@@ -8,7 +8,6 @@
 
 <script>
     import config from "../config.js";
-    import axios from "axios";
 
     export default {
         name: "Home",
@@ -16,25 +15,12 @@
             loginLink: function () {
                 let redirect_uri = window.location.href + "events";
                 return config.apiUrl + "authenticate?redirect_uri=" + redirect_uri;
-                // return config.apiUrl + "authenticate";
             }
         },
         created() {
             localStorage.removeItem("access_token");
             localStorage.removeItem("refresh_token");
         }
-        // methods: {
-        //     login() {
-        //         let axiosOptions = {
-        //             headers: {"Access-Control-Allow-Origin": "*"}
-        //         };
-        //         axios.get(this.loginLink).then(function (response) {
-        //             console.log(response);
-        //         }).catch(function (error) {
-        //             console.log(error);
-        //         });
-        //     }
-        // }
     }
 </script>
 

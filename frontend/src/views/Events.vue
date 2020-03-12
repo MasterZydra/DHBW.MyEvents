@@ -3,22 +3,30 @@
 		<p class="title white--text">Music events near you based on the genres of your favorite artists on Spotify.</p>
 		<h2 class="white--text">Filter:</h2>
 		<v-card class="pa-4" tile>
-			<v-text-field label="Location" outlined v-model="location" clearable></v-text-field>
-			<v-select :items="date" label="Date range" outlined v-model="selectedDate">
-			</v-select>
-			<template v-if="genres.length > 0">
-				<span class="font-italic grey--text subtitle-2">Click to disable/enable genres:</span>
-				<div class="chips">
-					<v-chip
-							class="ma-1" color="secondary"
-							v-for="(genre, index) in genres" :key="genre.name"
-							:color="genre.color"
-							@click="genre.disabled ? enableGenre(genre) : disableGenre(genre)">
-						{{genre.name}}
-					</v-chip>
-				</div>
-			</template>
-			<v-btn @click="updateEvents" color="primary">Anwenden</v-btn>
+			<v-form v-model="valid" ref="form">
+				<v-text-field :rules="rules" label="Location" outlined v-model="location" clearable required></v-text-field>
+				<v-select :items="date" label="Date range" outlined v-model="selectedDate">
+				</v-select>
+				<template v-if="genres.length > 0">
+					<span class="font-italic grey--text subtitle-2">Click to disable/enable genres:</span>
+					<v-btn text icon @click="genres.forEach(g => disableGenre(g))">
+						<v-icon>mdi-checkbox-multiple-blank-circle</v-icon>
+					</v-btn>
+					<v-btn text icon @click="genres.forEach(g => enableGenre(g))">
+						<v-icon color="secondary">mdi-checkbox-multiple-blank-circle</v-icon>
+					</v-btn>
+					<div class="chips">
+						<v-chip
+								class="ma-1" color="secondary"
+								v-for="(genre, index) in genres" :key="genre.name"
+								:color="genre.color"
+								@click="genre.disabled ? enableGenre(genre) : disableGenre(genre)">
+							{{genre.name}}
+						</v-chip>
+					</div>
+				</template>
+				<v-btn :disabled="!valid || !genresValid" @click="updateEvents" color="primary">Anwenden</v-btn>
+			</v-form>
 		</v-card>
 		<br>
 		<br>
@@ -119,6 +127,9 @@
 	export default {
 		name: "Events",
 		data: () => ({
+			valid: true,
+			genresValid: true,
+			rules: [v => !!v || 'Name is required'],
 			loadingGlobal: true,
 			loadingEvents: false,
 			eventsRequested: false,
@@ -208,11 +219,11 @@
 			refreshSpotifyToken: async function() {
 				let v = this;
 				let data = { refresh_token: localStorage.getItem("refresh_token") };
-				return await axios.post(config.apiUrl + "getSpotifyAccessToken/refresh", data).then(function (access_token) {
-					localStorage.setItem("access_token", access_token);
-					return Promise.resolve(access_token);
+				return await axios.post(config.apiUrl + "getSpotifyAccessToken/refresh", data).then(function (response) {
+					localStorage.setItem("access_token", response.data);
+					return Promise.resolve(response.data);
 				}).catch(function (error) {
-					v.error = "Could not refresh Spotify access_token: " + error.response.data;
+					v.error = "Could not refresh Spotify access_token: " + error.response.data + ". Please login again with Spotify.";
 					return Promise.reject(error);
 				});
 			},
@@ -260,13 +271,20 @@
 			enableGenre(genre) {
 				genre.color = 'secondary';
 				genre.disabled = false;
+				this.genresValid = true;
 			},
 			disableGenre(genre) {
-				if (this.getEnabledGenres().length > 1) {
-					genre.color = 'grey';
-					genre.disabled = true;
+				genre.color = 'grey';
+				genre.disabled = true;
+				if (this.getEnabledGenres().length <= 0) {
+					this.genresValid = false;
 				}
-			}
+			},
+
+
+			validate () {
+				this.$refs.form.validate()
+			},
 		}
 	}
 </script>
