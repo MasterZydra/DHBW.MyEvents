@@ -2,7 +2,7 @@ const apiDoc = {
     swagger: '2.0',
     basePath: '/',
     info: {
-        title: 'MyEvents - Events matching your music taste',
+        title: 'MyEvents - Find personalized music events with Spotify',
         version: '1.0.0'
     },
     definitions: {},
