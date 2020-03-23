@@ -34,7 +34,7 @@ function fillEvents(data) {
                 (resultEvents[i].performers.hasOwnProperty("performer")) ?
                     [resultEvents[i].performers.performer.name] :
                     [];
-
+            let links = resultEvents[i].links.link.url ? resultEvents[i].links.link.url : "";
             let title = !resultEvents[i].title.includes("\"") ?
                 decodeURIComponent(JSON.parse('"' + resultEvents[i].title + '"'))  :
                 resultEvents[i].title;
@@ -44,11 +44,11 @@ function fillEvents(data) {
                 start_time: resultEvents[i].start_time,
                 venue_name: resultEvents[i].venue_name,
                 venue_address: resultEvents[i].venue_address,
-                venue_type: resultEvents[i].venue_type,
                 description: resultEvents[i].description,
                 performers,
                 city_name: resultEvents[i].city_name,
-                image
+                image,
+                links
             };
             events.push(event);
         }
@@ -66,7 +66,8 @@ router.post('/', function(req, res, next){
             keywords,
             date: req.body.date || 'Next week',
             location,
-            page_size: req.body.page_size || 25
+            page_size: req.body.page_size || 25,
+            include: 'links'
         };
 
         client.searchEvents(options, function (err, data) {
