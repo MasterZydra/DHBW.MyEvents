@@ -18,6 +18,7 @@
             }
         },
         created() {
+            // remove Spotify access_token and refresh_token from localStorage so user will be logged out first
             localStorage.removeItem("access_token");
             localStorage.removeItem("refresh_token");
         }
@@ -25,13 +26,6 @@
 </script>
 
 <style scoped>
-    .background {
-        width: 100%;
-        height: 100%;
-        background-color: #509BF5;
-        background-image: -webkit-gradient(linear, left top, left bottom, from(#C074B2), to(#8AB5E8));
-        background-image: linear-gradient(#C074B2, #8AB5E8);
-    }
     .wrapper {
         text-align: center;
         padding-top: 10vh;

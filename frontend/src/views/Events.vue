@@ -152,7 +152,7 @@
 		async created() {
 			let v = this;
 
-			// initially save access_token
+			// initially save Spotify access_token and refresh_token to localStorage (Browser storage)
 			if (!localStorage.getItem('access_token')) {
 				await this.getSpotifyAccessToken().then(function (tokens) {
 					localStorage.setItem('access_token', tokens.access_token);
@@ -162,13 +162,16 @@
 				});
 			}
 
+			// start getting events
 			this.updateEvents();
 		},
 		methods: {
 			async updateEvents() {
 				let v = this;
+				// first get genres from backend
 				v.getGenres().then(function (genres) {
 					v.loadingEvents = true;
+					// then get events with events
 					v.getEvents(genres).then(function (events) {
 						console.log(events);
 						v.writeEvents(events);
@@ -180,7 +183,9 @@
 					});
 				}).catch(function (error) {
 					if (error.response.status === 401) {
+						// refresh expired spotify token with stored refresh_token in localStorage
 						v.refreshSpotifyToken().then(function () {
+							// write Events again (recursive call)
 							v.updateEvents();
 						});
 					} else {
@@ -269,7 +274,8 @@
 					return Promise.reject(error);
 				});
 			},
-
+			
+			// enable/disable genres (green/grey v-chips) => green=enabled, grey=disabled
 			getEnabledGenres() {
 				return this.genres.filter(g => !g.disabled);
 			},
@@ -286,6 +292,7 @@
 				}
 			},
 
+			// checks if form is valid (required fields)
 			validate () {
 				this.$refs.form.validate()
 			},

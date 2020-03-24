@@ -11,10 +11,7 @@
 
 <script>
 export default {
-  name: 'App',
-  data: () => ({
-    //
-  }),
+  name: 'App'
 };
 </script>
 
@@ -22,6 +19,7 @@ export default {
   * {
     font-family: "Roboto", sans-serif;
   }
+  /*fancy spotify background    */
   .v-content {
     background-color: #509BF5;
     background-image: linear-gradient(#C074B2, #8AB5E8);
