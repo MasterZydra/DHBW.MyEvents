@@ -1,4 +1,8 @@
+// This object contains the general information to the API.
+// Due to incompatibility of the implementation of openAPI to the routes
+// the endpoint data is added in this file.
 const apiDoc = {
+    // General API data
     swagger: '2.0',
     basePath: '/',
     info: {
@@ -7,6 +11,7 @@ const apiDoc = {
     },
     definitions: {},
     paths: {
+        // Endpoint details
         "/authenticate": {
             parameters: [],
             get: {

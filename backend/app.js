@@ -3,6 +3,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
+// Add package for openAPI implementation
 var expressOpenApi = require('express-openapi');
 var apiDoc = require('./api-doc');
 var cors = require('cors');
@@ -15,6 +16,7 @@ var accessToken = require('./routes/getSpotifyAccessToken');
 var app = express();
 app.use(cors());
 
+// Logic to add openAPI path '/api-docs' as endpoint
 var paths = [];
 expressOpenApi.initialize({
   apiDoc: apiDoc,
