@@ -4,6 +4,8 @@ const router = express.Router();
 const config = require("../config");
 
 async function getSpotifyAccessToken(code, redirect_uri) {
+    //requesting access token from Spotify
+    // parameters encoded in application/x-www-form-urlencoded
     let data = 'code=' + code + '&redirect_uri=' + redirect_uri + '&grant_type=authorization_code';
     let authOptions = {
         method: 'post',
@@ -27,6 +29,8 @@ async function getSpotifyAccessToken(code, redirect_uri) {
 }
 
 async function refreshToken(refresh_token) {
+    // requesting a refreshed access token
+    // parameters encoded in application/x-www-form-urlencoded
     let data = 'refresh_token=' + refresh_token + '&grant_type=refresh_token';
     let authOptions = {
         method: 'post',

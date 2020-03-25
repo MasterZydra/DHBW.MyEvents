@@ -5,6 +5,7 @@ const genre = require('../genres/genre.js');
 const config = require("../config");
 
 async function getTopArtists(access_token) {
+    // requesting the user's 20 top artists
     let artists_options = {
         method: 'get',
         url: 'https://api.spotify.com/v1/me/top/artists',
@@ -26,6 +27,7 @@ function getGenresFromArtists(artists) {
     if(artists == null || artists.length === 0) {
         return artistsGenres;
     }
+    // collecting all genres of the top artists
     artists.forEach(function(artist, index, array) {
         artist.genres.forEach(function (genre, index, array) {
             if(!artistsGenres.includes(genre)) {
@@ -35,6 +37,7 @@ function getGenresFromArtists(artists) {
     });
 
     let genres = [];
+    // collect the genres for which events can be found or assign them to their main genre
     artistsGenres.forEach(item => {
         let newItem = null;
         if (genre.isInEventful(item)) {

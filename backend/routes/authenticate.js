@@ -3,6 +3,7 @@ const router = express.Router();
 const config = require("../config");
 
 router.get('/', function(req, res, next){
+    // redirect to the Spotify login page
     if (req.query.hasOwnProperty("redirect_uri")) {
         res.redirect('http://accounts.spotify.com/authorize' +
             '?response_type=code' +
